@@ -21,11 +21,11 @@ R = [cos(psi_m) sin(psi_m) 0;...
     0 0 1];
 deltaV = R*(V_r-V_m)';
 
-sum_error_v_x = sum_error_v_x + deltaV(1)*0.01;
-sum_error_v_y = sum_error_v_y + deltaV(2)*0.01;
-sum_error_v_z = sum_error_v_z + deltaV(3)*0.01;
-theta_cmd = K_P_THETA*deltaV(1)+K_D_THETA*(deltaV(1)-previous_error_v_x)*100+K_I_THETA*sum_error_v_x;
-phi_cmd = K_P_PHI*deltaV(2)+K_D_PHI*(deltaV(2)-previous_error_v_y)*100+K_I_PHI*sum_error_v_y;
+sum_error_v_x = sum_error_v_x + deltaV(1)*0.02;
+sum_error_v_y = sum_error_v_y + deltaV(2)*0.02;
+sum_error_v_z = sum_error_v_z + deltaV(3)*0.02;
+theta_cmd = K_P_THETA*deltaV(1)+K_D_THETA*(deltaV(1)-previous_error_v_x)*50+K_I_THETA*sum_error_v_x;
+phi_cmd = K_P_PHI*deltaV(2)+K_D_PHI*(deltaV(2)-previous_error_v_y)*50+K_I_PHI*sum_error_v_y;
 thrust_cmd = -g + deltaV(3)*K_P_THRUST+K_I_THRUST*sum_error_v_z;
 
 theta_cmd = bound(theta_cmd);
