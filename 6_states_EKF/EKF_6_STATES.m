@@ -6,13 +6,13 @@ P_trace = zeros(length(GT.TIME),1);
 
 Q = diag([(0.5/180*pi)^2 (0.5/180*pi)^2 (0.5/180*pi)^2 0 0 0]);
 
-R = diag([20^2  20^2 0^2]);
+R = diag([10^2  10^2 0^2]);
 for i = 1:length(GT.TIME)
     if i == 1
         EKF_states(i,:) = [GT.PHI(i) GT.THETA(i) GT.PSI(i) 0 0 0];
         last_updated_states_EKF =  EKF_states(i,:);
         last_updated_inputs = [SENSOR.P(i) SENSOR.Q(i) SENSOR.R(i)];
-        P_k_k = 20*eye(6);
+        P_k_k = 10*eye(6);
         P_trace(i) = trace(P_k_k);
         continue;
     end

@@ -1,4 +1,5 @@
 clear
+clear global
 clc
 close all
 global GT

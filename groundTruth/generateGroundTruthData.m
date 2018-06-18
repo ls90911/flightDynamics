@@ -1,6 +1,6 @@
 function [] = generateGroundTruthData()
 global i step GT 
-GT.STEP = step;
+
 FIGURE = 0;
 
 global previous_error_v_x previous_error_v_y previous_error_v_z
@@ -17,7 +17,7 @@ sum_error_v_z = 0;
 
 simTime = 30;
 step = 0.02;
-
+GT.STEP = step;
 states = zeros(simTime/step,12);
 X_r = zeros(simTime/step,3);
 V_r = zeros(simTime/step,3);
@@ -29,17 +29,31 @@ V_r = zeros(simTime/step,3);
      if i == 1
          states(i,:) = [0 0 -1.5,0,0,0,0,0,0,0,0,0];
      end
-     if time(i) < 5
-         V_r(i,:) = [0.5 -0.5 0];
-     elseif time(i) < 10
-         V_r(i,:) = [-0.5 0.5 0];
-     elseif time(i) < 15
-         V_r(i,:) = [1 -0.5 0];
-     elseif time(i) < 20
-     else 
-         V_r(i,:) = [-0.5 0  0];
-     end
      
+     
+%      if time(i) < 5
+%          V_r(i,:) = [0.5 -0.5 0];
+%      elseif time(i) < 10
+%          V_r(i,:) = [-0.5 0.5 0];
+%      elseif time(i) < 15
+%          V_r(i,:) = [-1 -0.5 0];
+%      elseif time(i) < 20
+%      else 
+%          V_r(i,:) = [0.5 0  0];
+%      end
+if time(i) < 10
+    X_r(i,:) = [5*sin(pi/4*time(i)) -5*sin(pi/3*time(i)) -1.5];
+    X_m = states(i,1:3);
+    [V_r(i,:)] = positionController(X_r(i,:),X_m);
+elseif time(i) < 15
+    V_r(i,:) = [-0.5 0.5 0];
+elseif time(i) < 20
+    V_r(i,:) = [-1 -0.5 0];
+elseif time(i) < 25
+else
+    V_r(i,:) = [0.5 0  0];
+end
+
      %--------------------------
      % sensor model
      V_m = states(i,4:6);
@@ -47,6 +61,7 @@ V_r = zeros(simTime/step,3);
      psi_m = states(i,11);
      %----------------------------
      [attitude_cmd,thrust_cmd] = velocityController(V_r(i,:),V_m,psi_m);
+     %attitude_cmd = [30/180*pi*sin(pi/4*time(i)) 20/180*pi*sin(pi/3*time(i))]
      states(i+1,:) = droneModel(states(i,:),[attitude_cmd psi_r thrust_cmd],step);
  end
 
